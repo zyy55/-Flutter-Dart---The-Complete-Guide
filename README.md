@@ -1,4 +1,4 @@
-# flutter_complete_guide
+# expense_planner
 
 A new Flutter project.
 
