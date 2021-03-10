@@ -12,10 +12,14 @@ class ProductsGrid extends StatelessWidget {
       //const, don't rebuild it when rebuild the screen
       padding: const EdgeInsets.all(10.0),
       itemCount: products.length,
-      itemBuilder: (ctx, i) => ProductItem(
-        products[i].id,
-        products[i].title,
-        products[i].imageUrl,
+      itemBuilder: (ctx, i) =>  ChangeNotifierProvider(
+        //because inside of products we already gets each single products, so I don't want to rebuild it again
+        create: (ctx) => products[i],
+        child: ProductItem(
+          // products[i].id,
+          // products[i].title,
+          // products[i].imageUrl,
+        ),
       ),
       //how thw grid should be structured
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
