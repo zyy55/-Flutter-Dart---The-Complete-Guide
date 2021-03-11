@@ -23,7 +23,7 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
+      child: ListView(
         children: [
           Container(
             height: 120,
@@ -42,21 +42,81 @@ class MainDrawer extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          buildListTile(
-            'Meals',
-            Icons.restaurant,
-            () {
+        ExpansionPanelList(
+          expansionCallback: (int index, bool isExpanded) {},
+          children: [
+            ExpansionPanel(
+              headerBuilder: (BuildContext context, bool isExpanded) {
+                return ListTile(
+                  title: Text('Item 1'),
+                );
+              },
+              body: ListTile(
+                title: Text('Item 1 child'),
+                subtitle: Text('Details goes here'),
+              ),
+              isExpanded: true,
+            ),
+            ExpansionPanel(
+              headerBuilder: (BuildContext context, bool isExpanded) {
+                return ListTile(
+                  title: Text('Item 2'),
+                );
+              },
+              body: ListTile(
+                title: Text('Item 2 child'),
+                subtitle: Text('Details goes here'),
+              ),
+              isExpanded: false,
+            ),
+          ],
+        ),
+          ListTile(
+            title: Text('Horse'),
+            trailing: IconButton(
+              icon: Icon(Icons.keyboard_arrow_right),
+              onPressed: () {
+
+              },
+            ),
+            onTap: () {
               Navigator.of(context).pushReplacementNamed('/');
             },
           ),
-          buildListTile(
-            'Filters',
-            Icons.settings,
-            () {
-              Navigator.of(context)
-                  .pushReplacementNamed(FiltersScreen.routeName);
-            },
+      InkWell(
+        onTap: () {
+          Navigator.of(context).pushReplacementNamed('/');
+        },
+          child: ExpansionTile(
+            trailing: IconButton(
+                icon: Icon(Icons.keyboard_arrow_right),
+                onPressed: () {
+                  
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
+            ),
+            title: Text("Expansion Title"),
+            children: <Widget>[
+              buildListTile(
+                'Meals',
+                Icons.restaurant,
+                    () {
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
+              ),
+              buildListTile(
+                'Filters',
+                Icons.settings,
+                    () {
+                  Navigator.of(context)
+                      .pushReplacementNamed(FiltersScreen.routeName);
+                },
+              ),
+
+            ],
           ),
+        ),
+
         ],
       ),
     );
