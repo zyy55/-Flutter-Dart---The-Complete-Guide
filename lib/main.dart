@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import './screens/products_overview_screen.dart';
 import './screens/product_detail_screen.dart';
 import './providers/products.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // remove the comment for this line
 
 void main() => runApp(MyApp());
 
@@ -12,7 +14,21 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (ctx) => Products(),
       child: MaterialApp(
+        localizationsDelegates: [
+          // ... app-specific localization delegate[s] here
+          // TODO: uncomment the line below after codegen
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''), // English, no country code
+          const Locale('es', ''),
+          const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
+        ],
         title: 'MyShop',
+        // title: AppLocalizations.of(context).helloWorld.toString(),
         theme: ThemeData(
           primarySwatch: Colors.purple,
           accentColor: Colors.deepOrange,

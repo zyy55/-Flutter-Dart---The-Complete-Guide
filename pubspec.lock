@@ -62,30 +62,23 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  flutter_web_scrollbar:
+  intl:
     dependency: "direct main"
     description:
-      name: flutter_web_scrollbar
+      name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.3"
-  js:
-    dependency: transitive
-    description:
-      name: js
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.3"
+    version: "0.17.0"
   matcher:
     dependency: transitive
     description:

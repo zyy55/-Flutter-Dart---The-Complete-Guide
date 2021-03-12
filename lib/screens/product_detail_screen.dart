@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/products.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   // final String title;
@@ -19,7 +20,8 @@ class ProductDetailScreen extends StatelessWidget {
     ).findById(productId);
     return Scaffold(
       appBar: AppBar(
-        title: Text(loadedProduct.title),
+        //title: Text(loadedProduct.title),
+        title: Text(AppLocalizations.of(context).helloWorld),
       ),
     );
   }
