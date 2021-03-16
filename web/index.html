@@ -35,6 +35,8 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-messaging.js"></script>
+
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/8.3.0/firebase-analytics.js"></script>
@@ -56,12 +58,11 @@
   firebase.analytics();
 </script>
 <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('flutter-first-frame', function () {
-        navigator.serviceWorker.register('flutter_service_worker.js');
-      });
-    }
-
+ if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register("/firebase-messaging-sw.js");
+ });
+}
 </script>
 <script src="main.dart.js" type="application/javascript"></script>
 </body>
