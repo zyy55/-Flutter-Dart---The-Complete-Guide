@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +11,13 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    firebaseOnMessage();
+    onFirebaseOpenedApp();
+  }
+  void onFirebaseOpenedApp() {
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      print('onMessageOpenedApp occured. Message is: ');
+      print(event.notification.title);
+    });
   }
 
   void firebaseOnMessage() {
@@ -21,17 +25,20 @@ class _ChallengeScreenState extends State<ChallengeScreen> {
       if (message != null) {
         final title = message.notification.title;
         final body = message.notification.body;
-        showDialog(
-            context: context,
-            builder: (context) {
-              return SimpleDialog(
-                contentPadding: EdgeInsets.all(18),
-                children: [
-                  Text('Title: $title'),
-                  Text('Body: $body'),
-                ],
-              );
-            });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Title: $title, Body: $body')),
+        );
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return SimpleDialog(
+        //         contentPadding: EdgeInsets.all(18),
+        //         children: [
+        //           Text('Title: $title'),
+        //           Text('Body: $body'),
+        //         ],
+        //       );
+        //     });
       }
     });
   }

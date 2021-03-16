@@ -1,9 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import './screens/challengeScreen.dart';
 
 void main() {
   runApp(MyApp());
-  FirebaseMessaging.instance.getToken().then(print);
+  FirebaseMessaging.instance.getToken();
+  //FirebaseMessaging.instance.getToken().then(print);
 }
 
 class MyApp extends StatelessWidget {
@@ -25,6 +27,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: ChallengeScreen(),
+
     );
   }
 }
