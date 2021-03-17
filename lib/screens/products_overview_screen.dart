@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_complete_guide/screens/cart_screen.dart';
 import '../widgets/products_grid.dart';
 import 'package:provider/provider.dart';
-import '../providers/products.dart';
 import '../widgets/badge.dart';
 import '../providers/cart.dart';
 import '../screens/cart_screen.dart';
