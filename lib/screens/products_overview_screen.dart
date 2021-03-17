@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_complete_guide/screens/cart_screen.dart';
-import '../widgets/products_grid.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
+import '../widgets/app_drawer.dart';
 import '../providers/cart.dart';
 import '../screens/cart_screen.dart';
 
@@ -72,6 +73,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
           ),
         ],
       ),
+      drawer: AppDrawer(),
       //only rendering the items that are on the screen and not rendering the items that are not on the screen
       body: new ProductsGrid(_showOnlyFavorites),
     );
