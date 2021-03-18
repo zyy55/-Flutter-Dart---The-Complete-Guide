@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../providers/product.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -13,6 +14,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
   final _descriptionFocusNode = FocusNode();
   final _imageUriController = TextEditingController();
   final _imageUriFocusNode = FocusNode();
+  final _form = GlobalKey<FormState>();
+  var _editProduct = Product(
+    id: null,
+    title: '',
+    description: '',
+    price: 0,
+    imageUrl: '',
+  );
 
   @override
   void initState() {
@@ -36,15 +45,31 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
+  void _saveForm() {
+    //save that form
+    _form.currentState.save();
+    print(_editProduct.title);
+    print(_editProduct.description);
+    print(_editProduct.price);
+    print(_editProduct.imageUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Product'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: _saveForm,
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _form,
           child: ListView(
             children: [
               //labelText = hintText
@@ -53,6 +78,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
+                },
+                onSaved: (value) {
+                  _editProduct = Product(
+                    title: value,
+                    price: _editProduct.price,
+                    description: _editProduct.description,
+                    imageUrl: _editProduct.imageUrl,
+                    id: null,
+                  );
                 },
               ),
               TextFormField(
@@ -63,12 +97,30 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
+                onSaved: (value) {
+                  _editProduct = Product(
+                    title: _editProduct.title,
+                    price: double.parse(value),
+                    description: _editProduct.description,
+                    imageUrl: _editProduct.imageUrl,
+                    id: null,
+                  );
+                },
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Description'),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+                onSaved: (value) {
+                  _editProduct = Product(
+                    title: _editProduct.title,
+                    price: _editProduct.price,
+                    description: value,
+                    imageUrl: _editProduct.imageUrl,
+                    id: null,
+                  );
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -105,6 +157,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     controller: _imageUriController,
                     //If you change the field, it will save the image alone
                     focusNode: _imageUriFocusNode,
+                    onFieldSubmitted: (_) {
+                      _saveForm();
+                    },
+                    onSaved: (value) {
+                      _editProduct = Product(
+                        title: _editProduct.title,
+                        price: _editProduct.price,
+                        description: _editProduct.description,
+                        imageUrl: value,
+                        id: null,
+                      );
+                    },
                     onEditingComplete: () {
                       setState(() {});
                     },
