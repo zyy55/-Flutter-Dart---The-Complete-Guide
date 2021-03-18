@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -10,12 +11,29 @@ class EditProductScreen extends StatefulWidget {
 class _EditProductScreenState extends State<EditProductScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
+  final _imageUriController = TextEditingController();
+  final _imageUriFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    _imageUriFocusNode.addListener(_updateImageUrl);
+    super.initState();
+  }
 
   @override
   void dispose() {
+    _imageUriFocusNode.removeListener(_updateImageUrl);
     _priceFocusNode.dispose();
     _descriptionFocusNode.dispose();
+    _imageUriController.dispose();
+    _imageUriFocusNode.dispose();
     super.dispose();
+  }
+
+  void _updateImageUrl() {
+    if (!_imageUriFocusNode.hasFocus) {
+      setState(() {});
+    }
   }
 
   @override
@@ -51,6 +69,47 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descriptionFocusNode,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    margin: EdgeInsets.only(
+                      top: 8,
+                      right: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    child: _imageUriController.text.isEmpty
+                        ? Text('Enter a URL')
+                        : FittedBox(
+                            child: Image.network(
+                              _imageUriController.text,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                  ),
+                  Expanded(
+                      child: TextFormField(
+                    decoration: InputDecoration(labelText: 'Image URL'),
+                    keyboardType: TextInputType.url,
+                    //if it's not the last textFormFiel we need to write
+                    //textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
+                    controller: _imageUriController,
+                    //If you change the field, it will save the image alone
+                    focusNode: _imageUriFocusNode,
+                    onEditingComplete: () {
+                      setState(() {});
+                    },
+                  )),
+                ],
               ),
             ],
           ),
