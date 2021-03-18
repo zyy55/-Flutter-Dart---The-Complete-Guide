@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../providers/product.dart';
+import 'package:provider/provider.dart';
+import '../providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -57,10 +59,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isValid) return;
     //save that form
     _form.currentState.save();
-    print(_editProduct.title);
-    print(_editProduct.description);
-    print(_editProduct.price);
-    print(_editProduct.imageUrl);
+    //listen to false, because I am not interested in change the value
+    Provider.of<Products>(context, listen: false).addProduct(_editProduct);
+    Navigator.of(context).pop();
   }
 
   @override
