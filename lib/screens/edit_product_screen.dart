@@ -103,7 +103,23 @@ class _EditProductScreenState extends State<EditProductScreen> {
       //listen to false, because I am not interested in change the value
       Provider.of<Products>(context, listen: false)
           .addProduct(_editedProduct)
-          .then((_) {
+          .catchError((error) {
+        return showDialog<Null>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            //isede of the text you can do error.toString()
+            title: Text('An error occurred!'),
+            content: Text('Something went wrong.'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                  },
+                  child: Text('Okay'))
+            ],
+          ),
+        );
+      }).then((_) {
         setState(() {
           _isLoading = false;
         });
