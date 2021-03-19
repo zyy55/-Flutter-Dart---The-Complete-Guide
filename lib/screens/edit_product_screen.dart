@@ -83,7 +83,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) return;
     //save that form
@@ -95,16 +95,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_editedProduct.id != null) {
       //listen to false, because I am not interested in change the value
       Provider.of<Products>(context, listen: false)
-          .updateProducte(_editedProduct.id, _editedProduct);
+          .updateProduct(_editedProduct.id, _editedProduct);
       setState(() {
         _isLoading = false;
       });
+      Navigator.of(context).pop();
     } else {
-      //listen to false, because I am not interested in change the value
-      Provider.of<Products>(context, listen: false)
-          .addProduct(_editedProduct)
-          .catchError((error) {
-        return showDialog<Null>(
+      try {
+        //listen to false, because I am not interested in change the value
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog<Null>(
           context: context,
           builder: (ctx) => AlertDialog(
             //isede of the text you can do error.toString()
@@ -119,12 +121,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      }).then((_) {
+        //no matter we get error or not, it will execute finally
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     }
   }
 
