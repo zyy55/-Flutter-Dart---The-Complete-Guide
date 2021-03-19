@@ -67,11 +67,11 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     //if you put a name after /, it will create a folder named with that string
     var url = Uri.https(
         'flutter-httprequest-default-rtdb.firebaseio.com', '/products.json');
-    http
+    return http
         .post(
       url,
       body: json.encode({
