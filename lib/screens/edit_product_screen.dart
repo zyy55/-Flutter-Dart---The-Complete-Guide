@@ -94,12 +94,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
     // id we only receive it when we come from edit
     if (_editedProduct.id != null) {
       //listen to false, because I am not interested in change the value
-      Provider.of<Products>(context, listen: false)
+      await Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
-      setState(() {
-        _isLoading = false;
-      });
-      Navigator.of(context).pop();
+
     } else {
       try {
         //listen to false, because I am not interested in change the value
@@ -122,13 +119,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
           ),
         );
         //no matter we get error or not, it will execute finally
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
       }
+      // finally {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   Navigator.of(context).pop();
+      // }
     }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.of(context).pop();
   }
 
   @override
