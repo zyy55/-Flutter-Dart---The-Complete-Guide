@@ -127,6 +127,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       //   Navigator.of(context).pop();
       // }
     }
+    //this will be done when all of the three befores is finished
     setState(() {
       _isLoading = false;
     });
