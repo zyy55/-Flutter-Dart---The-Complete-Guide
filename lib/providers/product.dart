@@ -32,8 +32,7 @@ class Product with ChangeNotifier {
     final oldStatus = isFavorite;
     isFavorite = !isFavorite;
     notifyListeners();
-    final url = Uri.https(
-        'flutter-httprequest-default-rtdb.firebaseio.com', '/product/$id.json?auth=$token');
+    final url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product/$id.json?auth=$token');
     try {
       final response = await http.patch(url,
           body: json.encode({
