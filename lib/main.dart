@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
 
       ],
-      child: MaterialApp(
+      child: Consumer<Auth>(builder: (ctx, auth, _) => MaterialApp(
         localizationsDelegates: [
           // ... app-specific localization delegate[s] here
           // TODO: uncomment the line below after codegen
@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.deepOrange,
           fontFamily: 'Lato',
         ),
-        home: AuthScreen(),
+        home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
           UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
           EditProductScreen.routeName: (ctx) => EditProductScreen(),
         },
-      ),
+      ),),
     );
   }
 }
