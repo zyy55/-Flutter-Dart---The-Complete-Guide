@@ -41,6 +41,8 @@ class Products with ChangeNotifier {
   ];
 
   // var _showFavoritesOnly = false;
+  final String authToken;
+  Products(this.authToken, this._items);
 
   List<Product> get items {
     //return a copy of items
@@ -68,8 +70,7 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
   Future<void> fetchAndSetProducts() async {
-    var url = Uri.https(
-        'flutter-httprequest-default-rtdb.firebaseio.com', '/product.json');
+    final url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product.json?auth=$authToken');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -98,8 +99,7 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     //if you put a name after /, it will create a folder named with that string
-    var url = Uri.https(
-        'flutter-httprequest-default-rtdb.firebaseio.com', '/product.json');
+    var url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product.json');
     try {
       final response = await http.post(
         url,
@@ -129,8 +129,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url = Uri.https('flutter-httprequest-default-rtdb.firebaseio.com',
-          '/product/$id.json');
+      final url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product/$id.json');
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -146,8 +145,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async{
-    final url = Uri.https(
-        'flutter-httprequest-default-rtdb.firebaseio.com', '/product/$id.json');
+    final url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product/$id.json');
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
