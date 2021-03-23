@@ -43,6 +43,7 @@ class Products with ChangeNotifier {
   // var _showFavoritesOnly = false;
   final String authToken;
   final String userId;
+
   Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
@@ -70,13 +71,15 @@ class Products with ChangeNotifier {
   //   _showFavoritesOnly = false;
   //   notifyListeners();
   // }
-  Future<void> fetchAndSetProducts() async {
-    var url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product.json?auth=$authToken');
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    var url = Uri.parse(
+        'https://flutter-httprequest-default-rtdb.firebaseio.com/product.json?auth=$authToken&$filterString');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
-      if(extractedData == null) {
+      if (extractedData == null) {
         return;
       }
 
@@ -93,7 +96,8 @@ class Products with ChangeNotifier {
             price: prodData['price'],
             imageUrl: prodData['imageUrl'],
             //if it is null will use the value after ??
-            isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
+            isFavorite:
+                favoriteData == null ? false : favoriteData[prodId] ?? false,
           ),
         );
       });
@@ -106,7 +110,8 @@ class Products with ChangeNotifier {
 
   Future<void> addProduct(Product product) async {
     //if you put a name after /, it will create a folder named with that string
-    final url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product.json?auth=$authToken');
+    final url = Uri.parse(
+        'https://flutter-httprequest-default-rtdb.firebaseio.com/product.json?auth=$authToken');
     try {
       final response = await http.post(
         url,
@@ -115,6 +120,8 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
+          //only store in server
+          'creatorId': userId,
         }),
       );
       final newProduct = Product(
@@ -135,7 +142,8 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product/$id.json?auth=$authToken');
+      final url = Uri.parse(
+          'https://flutter-httprequest-default-rtdb.firebaseio.com/product/$id.json?auth=$authToken');
       await http.patch(url,
           body: json.encode({
             'title': newProduct.title,
@@ -150,18 +158,19 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> deleteProduct(String id) async{
-    final url = Uri.parse('https://flutter-httprequest-default-rtdb.firebaseio.com/product/$id.json?auth=$authToken');
+  Future<void> deleteProduct(String id) async {
+    final url = Uri.parse(
+        'https://flutter-httprequest-default-rtdb.firebaseio.com/product/$id.json?auth=$authToken');
     final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
     notifyListeners();
     final response = await http.delete(url);
-      if(response.statusCode >= 400) {
-        _items.insert(existingProductIndex, existingProduct);
-        notifyListeners();
-        throw HttpException('Could not delete product.');
-      }
-      existingProduct = null;
+    if (response.statusCode >= 400) {
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException('Could not delete product.');
+    }
+    existingProduct = null;
   }
 }
